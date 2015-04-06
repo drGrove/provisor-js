@@ -47,8 +47,8 @@ def validate_pubkey(value):
       
     value = value.replace("\"", "").replace("'", "").replace("\\\"", "")
     value = value.split(' ')
-    if value[0] not in ('ssh-rsa','ssh-dsa','ssh-ecdsa'):
-        raise ValueError("Expected 'ssh-rsa', 'ssh-dsa', or 'ssh-ecdsa'")
+    if value[0] not in ('ssh-rsa','ssh-dss','ssh-ecdsa'):
+        raise ValueError("Expected 'ssh-rsa', 'ssh-dss', or 'ssh-ecdsa'")
     try:
         base64.decodestring(bytes(value[1]))
     except:
