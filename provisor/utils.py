@@ -11,12 +11,12 @@ import termios
 
 
 def make_salt():
-  salt = ""
-  while len(salt) < 8:
-    c = os.urandom(1)
-    if re.match('[a-zA-Z0-9./]', c):
-      salt += c
-  return salt
+    salt = ""
+    while len(salt) < 8:
+        c = os.urandom(1)
+        if re.match('[a-zA-Z0-9./]', c):
+            salt += c
+    return salt
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
@@ -47,12 +47,13 @@ def getch():
 
 def validate_pubkey(value):
     if len(value) > 8192 or len(value) < 80:
-      raise ValueError("Expected length to be between 80 and 8192 characters")
+        raise ValueError(
+            "Expected length to be between 80 and 8192 characters")
 
     value = value.replace("\"", "").replace("'", "").replace("\\\"", "")
     value = value.split(' ')
-    types = [ 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384',
-              'ecdsa-sha2-nistp521', 'ssh-rsa', 'ssh-dss', 'ssh-ed25519' ]
+    types = ['ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384',
+             'ecdsa-sha2-nistp521', 'ssh-rsa', 'ssh-dss', 'ssh-ed25519']
     if value[0] not in types:
         raise ValueError(
             "Expected " + ', '.join(types[:-1]) + ', or ' + types[-1]
@@ -67,29 +68,22 @@ def validate_pubkey(value):
 
 
 def validate_username(value):
-    reserved_usernames = [
-        'about', 'abuse', 'main', 'data', 'example', 'jabber', 'legal', 'invite',
-        'copyright', 'contact', 'board', 'feedback', 'support', 'anonymous', 'index',
-        'inbox', 'payment', 'donate', 'calendar', 'dotfiles', 'billing', 'billings',
-        'images', 'media', 'policy', 'manage', 'messages', 'mobile', 'official',
-        'staging', 'development', 'staff', 'portal', 'forum', 'forums', 'pictures',
-        'photos', 'status', 'finger', 'private', 'press', 'user', 'users', 'username',
-        'usernames', 'sitemap', 'team', 'teams', 'account', 'accounts', 'chat', 'mail',
-        'email', 'admin', 'admins', 'administrator', 'administrators', 'postmaster',
-        'hostmaster', 'webmaster'
-    ]
+    from reserved import RESERVED_USERNAMES
 
     # Regexp must be kept in sync with
-    #  https://github.com/hashbang/hashbang.sh/blob/master/src/hashbang.sh#L178-191
+    #  https://github.com/hashbang/hashbang.sh/blob/master/src/hashbang.sh#L186-196
     if re.compile(r"^[a-z][a-z0-9]{,30}$").match(value) is None:
         raise ValueError('Username is invalid')
-    if value in reserved_usernames:
+
+    if value in RESERVED_USERNAMES:
         raise ValueError('Username is reserved')
+
     user_exists = True
     try:
         pwd.getpwnam(value)
     except:
         user_exists = False
+
     if user_exists:
         raise ValueError('Username already exists')
     return value
