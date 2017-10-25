@@ -51,8 +51,10 @@ def validate_username(value):
     import re
     from reserved import RESERVED_USERNAMES
 
-    # Regexp must be kept in sync with
-    #  https://github.com/hashbang/hashbang.sh/blob/master/src/hashbang.sh#L186-196
+    # Regexp must be kept in sync with the routine in
+    #  https://github.com/hashbang/hashbang.sh/blob/master/src/hashbang.sh
+    #  that checks the username using a regular expression.  Look for a
+    #  comment that contains a link to this file.
     if re.compile(r"^[a-z][a-z0-9]{,30}$").match(value) is None:
         raise ValueError('Username is invalid')
 
