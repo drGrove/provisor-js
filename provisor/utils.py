@@ -11,12 +11,12 @@ import termios
 
 
 def make_salt():
-  salt = ""
-  while len(salt) < 8:
-    c = os.urandom(1)
-    if re.match('[a-zA-Z0-9./]', c):
-      salt += c
-  return salt
+    salt = ""
+    while len(salt) < 8:
+        c = os.urandom(1)
+        if re.match('[a-zA-Z0-9./]', c):
+            salt += c
+    return salt
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
@@ -47,12 +47,13 @@ def getch():
 
 def validate_pubkey(value):
     if len(value) > 8192 or len(value) < 80:
-      raise ValueError("Expected length to be between 80 and 8192 characters")
+        raise ValueError(
+            "Expected length to be between 80 and 8192 characters")
 
     value = value.replace("\"", "").replace("'", "").replace("\\\"", "")
     value = value.split(' ')
-    types = [ 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384',
-              'ecdsa-sha2-nistp521', 'ssh-rsa', 'ssh-dss', 'ssh-ed25519' ]
+    types = ['ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384',
+             'ecdsa-sha2-nistp521', 'ssh-rsa', 'ssh-dss', 'ssh-ed25519']
     if value[0] not in types:
         raise ValueError(
             "Expected " + ', '.join(types[:-1]) + ', or ' + types[-1]
