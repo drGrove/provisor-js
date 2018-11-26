@@ -57,6 +57,17 @@ class Provisor(object):
         users.append(r[1][attrs][0])
     return tuple(users)
 
+  def list_privateports(self):
+    port_maps = []
+    results = self.con.search_s(user_base, ldap.SCOPE_ONELEVEL, '(objectClass=*)', ("uid","uidNumber","host",), 0)
+    for result in results:
+      uid = int(r[1]['uidNumber'][0])
+      username = r[1]['uid'][0]
+      hostname = r[1]['host'][0].split('.')[0]
+      port_maps.append({"username": username, "uid": uid, "hostname": hostname})
+    return tuple(port_maps)
+
+
   def server_stats(self):
     stats = OrderedDict()
     server_list = self.servers()
