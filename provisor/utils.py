@@ -34,7 +34,9 @@ def validate_pubkey(value):
     value = value.split(' ')
     types = [ 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384',
               'ecdsa-sha2-nistp521', 'ssh-rsa', 'ssh-dss', 'ssh-ed25519' ]
-    if value[0] not in types:
+    options = [ 'cert-authority' ]
+    valid = value[0] in types or (value[0] in options and value[1] in types)
+    if not valid:
         raise ValueError(
             "Expected " + ', '.join(types[:-1]) + ', or ' + types[-1]
         )
